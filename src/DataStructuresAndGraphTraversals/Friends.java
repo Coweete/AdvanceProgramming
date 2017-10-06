@@ -1,101 +1,93 @@
 package DataStructuresAndGraphTraversals;
 
-import javax.xml.soap.Node;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Queue;
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class Friends {
 
-    private int pairs,citizens,citizen,friend,biggestFriends = 1;
-    private ArrayList<Node> citizensList;
-
+    private Scanner scanner;
 
     public static void main(String[] args) {
         Friends friends = new Friends();
         try {
-            friends.findFriends();
+            friends.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void findFriends() throws IOException{
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    public void start() throws IOException{
+        scanner = new Scanner(System.in);
         int testCases;
-        String[] input;
-        testCases = Integer.parseInt(reader.readLine());
+        String input[];
+        testCases = Integer.parseInt(scanner.nextLine());
+
 
         for (int i = 0; i < testCases; i++) {
-           String res = reader.readLine();
-           input = res.split(" ");
-           citizens = Integer.parseInt(input[0]);
-           pairs = Integer.parseInt(input[1]);
+            int citizens = 0, pairs = 0,biggestGroupOffFriends = 1;
+            input = scanner.nextLine().split(" ");
+            citizens = Integer.parseInt(input[0]);
+            pairs = Integer.parseInt(input[1]);
+            HashMap<Integer,Node> citizenTestList = new HashMap<>();
 
-           System.out.println("Citizens: " + citizens + " Pairs: " + pairs);
-           citizensList = new ArrayList<Node>();
-
-            for (int j = 0; j < citizens; j++) {
-                Node n = new Node(j);
-                citizensList.add(n);
+            for (int j = 1; j < citizens+1; j++) {
+                //citizensList.add(new Node(j));
+                citizenTestList.put(j,new Node(j));
             }
 
-           for (int j = 0; j < pairs; j++) {
-               res = reader.readLine();
-               input = res.split(" ");
-               citizen = Integer.parseInt(input[0]);
-               friend = Integer.parseInt(input[1]);
 
-               citizensList.get(citizen-1).friends.add(friend);
-               citizensList.get(friend-1).friends.add(citizen);
-           }
+            int citizen,friend;
+            for (int j = 1; j < pairs +1; j++) {
+                input = scanner.nextLine().split(" ");
+                citizen = Integer.parseInt(input[0]);
+                friend = Integer.parseInt(input[1]);
 
-            for (int j = 0; j < citizens; j++) {
-                if(!citizensList.get(j).visited){
-                    checkForFriends(citizensList.get(j));
+                if (!citizenTestList.get(citizen).friends.contains(friend)){
+                    citizenTestList.get(citizen).friends.add(friend);
+                    citizenTestList.get(friend).friends.add(citizen);
                 }
-                System.out.println("Citizen List " + j + " " + citizensList.size());
-                if (biggestFriends < citizensList.get(j).friends.size()){
-                    System.out.println("In If statement: " + citizensList.get(j).friends.size());
-                    biggestFriends = citizensList.get(j).friends.size();
-                }
+
             }
-            System.out.println("Biggest friends:" + biggestFriends);
-            citizensList.clear();
-            biggestFriends = 1;
+
+            for (int j = 1; j < citizenTestList.size(); j++) {
+                if (!citizenTestList.get(j).visited){
+                    findFriends(citizenTestList.get(j),citizenTestList);
+                }
+                if (biggestGroupOffFriends < citizenTestList.get(j).friends.size()){
+                    biggestGroupOffFriends = citizenTestList.get(j).friends.size();
+                }
+
+            }
+
+            citizenTestList.clear();
+            System.out.println(biggestGroupOffFriends);
+
         }
-
     }
 
-    private void checkForFriends(Node node) {
+    private void findFriends(Node node, HashMap<Integer,Node> list){
         node.visited = true;
-        System.out.println("Node id:" + node.id);
-        for (int i = 0; i < node.friends.size(); i++) {
-            if(!citizensList.get(node.friends.get(i)).visited){
-                checkForFriends(citizensList.get(node.friends.get(i)));
-                addFriends(citizensList.get(node.friends.get(i)).friends,node);
+        for (int i = 0; i < list.get(node.id).friends.size(); i++) {
+            if (!list.get(node.friends.get(i)).visited){
+                findFriends(list.get(node.friends.get(i)),list);
+                addNewFriends(node,list.get(node.friends.get(i)).friends);
+            }
+        }
+
+    }
+
+    private void addNewFriends(Node node, ArrayList<Integer> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (!node.friends.contains(list.get(i))){
+                node.friends.add(list.get(i));
             }
         }
     }
 
-    public void checkForFriends(int index){
-        citizensList.get(index).visited = true;
-        for (int i = 0; i < citizensList.get(index).friends.size(); i++) {
-        }
-    }
 
-    public void addFriends(ArrayList<Integer> friends,Node node){
-        for (int i = 0; i < friends.size(); i++) {
-            if (!node.friends.contains(friends.get(i))){
-                node.friends.add(friends.get(i));
-            }
-        }
-    }
-
-    class Node{
+    private class Node{
         int id;
         boolean visited;
         ArrayList<Integer> friends;
@@ -103,6 +95,7 @@ public class Friends {
         public Node(int id){
             this.id = id;
             friends = new ArrayList<>();
+            visited = false;
         }
     }
 }

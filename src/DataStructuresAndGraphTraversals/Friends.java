@@ -21,19 +21,19 @@ public class Friends {
     public void start() throws IOException{
         scanner = new Scanner(System.in);
         int testCases;
+        int citizens = 0, pairs = 0,biggestGroupOffFriends = 1;
         String input[];
         testCases = Integer.parseInt(scanner.nextLine());
 
 
         for (int i = 0; i < testCases; i++) {
-            int citizens = 0, pairs = 0,biggestGroupOffFriends = 1;
+
             input = scanner.nextLine().split(" ");
             citizens = Integer.parseInt(input[0]);
             pairs = Integer.parseInt(input[1]);
             HashMap<Integer,Node> citizenTestList = new HashMap<>();
 
             for (int j = 1; j < citizens+1; j++) {
-                //citizensList.add(new Node(j));
                 citizenTestList.put(j,new Node(j));
             }
 
@@ -63,7 +63,7 @@ public class Friends {
 
             citizenTestList.clear();
             System.out.println(biggestGroupOffFriends);
-
+            biggestGroupOffFriends = 1;
         }
     }
 

@@ -36,9 +36,7 @@ public class SunnyMountains {
             Collections.sort(nodes, Comparator.comparing(Node::getX));
             result = calculateDistance(nodes);
             System.out.println(String.format("%.2f",result));
-
         }
-
     }
 
     private double calculateDistance(ArrayList<Node> nodes){

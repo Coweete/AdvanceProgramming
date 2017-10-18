@@ -24,7 +24,7 @@ public class TheArtGallery {
         int numberofPoints, temp, temp1;
         ArrayList<Point> points;
         ArrayList<Boolean> booleans = new ArrayList<>();
-        boolean flag;
+        boolean flag, startValue;
         numberofPoints = Integer.parseInt(scanner.nextLine());
         while (true) {
             points = createPoints(numberofPoints);
@@ -33,7 +33,9 @@ public class TheArtGallery {
             } else {
                 flag = true;
 
-                for (int i = 0; i < points.size(); i++) {
+                startValue = ccw(points.get(0),points.get(1),points.get(2));
+
+                for (int i = 1; i < points.size(); i++) {
                     if ((i + 2) == points.size()) {
                         temp = 0;
                     } else if ((i + 2) > points.size()) {
@@ -46,16 +48,11 @@ public class TheArtGallery {
                     } else {
                         temp1 = i + 1;
                     }
-                    booleans.add(ccw(points.get(i), points.get(temp1), points.get(temp)));
-                }
-
-                for (int i = 1; i < booleans.size(); i++) {
-                    if (!(booleans.get(0) == booleans.get(i))) {
+                    if (startValue != ccw(points.get(i), points.get(temp1), points.get(temp))){
                         flag = false;
                         break;
                     }
                 }
-
                 if (flag) {
                     System.out.println("No");
                 } else {

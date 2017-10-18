@@ -1,13 +1,14 @@
 package ComputationalGeometry;
 
 import java.awt.geom.Line2D;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class TheArtGallery {
 
-    private Scanner scanner;
+    private BufferedReader reader;
 
     public static void main(String[] args) {
         TheArtGallery artGallery = new TheArtGallery();
@@ -20,12 +21,12 @@ public class TheArtGallery {
     }
 
     public void start() throws IOException {
-        scanner = new Scanner(System.in);
+        reader = new BufferedReader(new InputStreamReader(System.in));
         int numberofPoints, temp, temp1;
         ArrayList<Point> points;
         ArrayList<Boolean> booleans = new ArrayList<>();
         boolean flag, startValue;
-        numberofPoints = Integer.parseInt(scanner.nextLine());
+        numberofPoints = Integer.parseInt(reader.readLine());
         while (true) {
             points = createPoints(numberofPoints);
             if (!isPolygon(points)) {
@@ -61,18 +62,19 @@ public class TheArtGallery {
             }
             points.clear();
             booleans.clear();
-            numberofPoints = Integer.parseInt(scanner.nextLine());
+            numberofPoints = Integer.parseInt(reader.readLine());
             if (numberofPoints == 0) {
                 break;
             }
         }
     }
 
-    private ArrayList<Point> createPoints(int numberofpoints) {
+    private ArrayList<Point> createPoints(int numberofpoints) throws IOException {
         ArrayList<Point> points = new ArrayList<>();
         String[] input;
         for (int i = 0; i < numberofpoints; i++) {
-            input = scanner.nextLine().split(" ");
+            //input = scanner.nextLine().split(" ");
+            input = reader.readLine().toString().split(" ");
             points.add(new Point(Integer.parseInt(input[0]), Integer.parseInt(input[1])));
         }
         return points;

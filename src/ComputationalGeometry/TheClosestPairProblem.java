@@ -1,5 +1,6 @@
 package ComputationalGeometry;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,8 +55,15 @@ public class TheClosestPairProblem {
         if(sX.size() <= 3){
             //Solve by bruteforce
         }else{
-            int x = sX.get((sX.size()-1)/2).x;
+            int n = sX.size() / 2;
+            ArrayList<Pair> xL = new ArrayList<>(sX.subList(0,n));
+            ArrayList<Pair> xR = new ArrayList<>(sX.subList(n+1,sX.size()-1));
+
         }
+    }
+
+    private double dist(Pair p1,Pair p2){
+        return Math.sqrt(((Math.pow((p1.x - p2.x),2)) + (Math.pow((p1.y - p2.y),2))));
     }
 
     public ArrayList<Pair> createNodes(int numberofnodes){
@@ -63,7 +71,7 @@ public class TheClosestPairProblem {
         String[] input;
         for (int i = 0; i < numberofnodes; i++) {
             input = scanner.nextLine().split(" ");
-            pairs.add(new Pair(Integer.parseInt(input[0]),Integer.parseInt(input[1])));
+            pairs.add(new Pair(Double.parseDouble(input[0]),Double.parseDouble(input[1])));
         }
         return pairs;
     }
@@ -76,18 +84,18 @@ public class TheClosestPairProblem {
 
 
     private class Pair {
-        int x,y;
+        double x,y;
 
-        public Pair(int x, int y){
+        public Pair(double x, double y){
             this.x = x;
             this.y = y;
         }
 
-        public int getX() {
+        public double getX() {
             return x;
         }
 
-        public int getY() {
+        public double getY() {
             return y;
         }
     }

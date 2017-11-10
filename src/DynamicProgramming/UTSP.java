@@ -173,6 +173,9 @@ public class UTSP {
                     nodes[i][j] = new Node(Integer.parseInt(input[j]), i, j);
                 }
             }
+
+
+
         }
 
         return nodes;

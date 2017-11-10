@@ -1,7 +1,5 @@
 package DataStructuresAndGraphTraversals;
 
-import Problems.BoxOfBricks;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,7 +10,6 @@ public class Borg_Maze {
 
     private BufferedReader bufferedReader;
     private ArrayList<BoardTile> nodes;
-    private int counter;
 
     public static void main(String[] args) {
         Borg_Maze maze = new Borg_Maze();
@@ -32,7 +29,6 @@ public class Borg_Maze {
         nodes = new ArrayList<>();
 
         for (int i = 0; i < testcases; i++) {
-            counter = 0;
             input = bufferedReader.readLine().split(" ");
             xIndex = Integer.parseInt(input[0]);
             yIndex = Integer.parseInt(input[1]);
@@ -40,18 +36,19 @@ public class Borg_Maze {
 
             ArrayList<Edges> edges = new ArrayList<>();
             for (int j = 0; j < nodes.size(); j++) {
-                int[][] array = weight_list(xIndex, yIndex, nodes.get(j).x, nodes.get(j).y);
+                //int[][] array = weight_list(xIndex, yIndex, nodes.get(j).x, nodes.get(j).y);
+                int[][] array = new int[yIndex][xIndex];
+                array[nodes.get(j).y][nodes.get(j).x] = 1;
                 ArrayList<BoardTile> temp = new ArrayList<>(nodes);
                 bfs(array, boardTiles, nodes.get(j));
                 for (int k = j + 1; k < temp.size(); k++) {
-                    edges.add(new Edges(nodes.get(j), temp.get(k), array[temp.get(k).y][temp.get(k).x]));
+                    edges.add(new Edges(nodes.get(j), temp.get(k), (array[temp.get(k).y][temp.get(k).x] - 1)));
                 }
 
             }
-
-            sum = kruskal(nodes, edges);
-            System.out.println(sum);
-            edges.clear();
+            //sum = kruskal(edges);
+            //System.out.println(sum);
+            kruskal(edges);
             nodes.clear();
         }
 
@@ -67,21 +64,21 @@ public class Borg_Maze {
             BoardTile tempNode = queue.pop();
 
             if ((tempNode.x + 1 < boardTiles[0].length) && !(boardTiles[tempNode.y][tempNode.x + 1].id == '#')
-                    && (weight[tempNode.y][tempNode.x + 1] == -1)) {
+                    && (weight[tempNode.y][tempNode.x + 1] == 0)) {
 
                 weight[tempNode.y][tempNode.x + 1] = weight[tempNode.y][tempNode.x] + 1;
                 BoardTile search = boardTiles[tempNode.y][tempNode.x + 1];
                 queue.add(search);
             }
             if ((tempNode.x - 1 >= 0) && !(boardTiles[tempNode.y][tempNode.x - 1].id == '#')
-                    && (weight[tempNode.y][tempNode.x - 1] == -1)) {
+                    && (weight[tempNode.y][tempNode.x - 1] == 0)) {
 
                 weight[tempNode.y][tempNode.x - 1] = weight[tempNode.y][tempNode.x] + 1;
                 BoardTile search = boardTiles[tempNode.y][tempNode.x - 1];
                 queue.add(search);
             }
             if ((tempNode.y + 1 < boardTiles.length) && !(boardTiles[tempNode.y + 1][tempNode.x].id == '#')
-                    && (weight[tempNode.y + 1][tempNode.x] == -1)) {
+                    && (weight[tempNode.y + 1][tempNode.x] == 0)) {
 
                 weight[tempNode.y + 1][tempNode.x] = weight[tempNode.y][tempNode.x] + 1;
                 BoardTile search = boardTiles[tempNode.y + 1][tempNode.x];
@@ -89,19 +86,16 @@ public class Borg_Maze {
 
             }
             if ((tempNode.y - 1 >= 0) && !(boardTiles[tempNode.y - 1][tempNode.x].id == '#')
-                    && (weight[tempNode.y - 1][tempNode.x] == -1)) {
+                    && (weight[tempNode.y - 1][tempNode.x] == 0)) {
 
                 weight[tempNode.y - 1][tempNode.x] = weight[tempNode.y][tempNode.x] + 1;
                 BoardTile search = boardTiles[tempNode.y - 1][tempNode.x];
                 queue.add(search);
             }
-
-
         }
-
     }
 
-    private int kruskal(ArrayList<BoardTile> vertices, ArrayList<Edges> edges) {
+    private void kruskal(ArrayList<Edges> edges) {
         ArrayList<Edges> treeSet = new ArrayList<>();
         int sum = 0;
         Collections.sort(edges, Comparator.comparing(Edges::getDistance));
@@ -112,7 +106,7 @@ public class Borg_Maze {
                 sum += edges.get(i).distance;
             }
         }
-        return sum;
+        System.out.println(sum);
     }
 
     private BoardTile find(BoardTile node) {
@@ -155,9 +149,9 @@ public class Borg_Maze {
             input = bufferedReader.readLine();
             for (int j = 0; j < x; j++) {
                 if (input.charAt(j) == 'S') {
-                    nodes.add(new BoardTile(j, i, 'S', "S"));
+                    nodes.add(new BoardTile(j, i, 'S'));
                 } else if (input.charAt(j) == 'A') {
-                    nodes.add(new BoardTile(j, i, 'A', "A" + counter++));
+                    nodes.add(new BoardTile(j, i, 'A'));
                 }
                 boardTiles[i][j] = new BoardTile(j, i, input.charAt(j));
             }

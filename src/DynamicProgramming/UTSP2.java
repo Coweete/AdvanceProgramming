@@ -1,7 +1,9 @@
 package DynamicProgramming;
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -9,6 +11,7 @@ import java.util.Scanner;
 public class UTSP2 {
 
     private Scanner scanner;
+    //private BufferedReader bufferedReader;
 
     public static void main(String[] args) {
         UTSP2 utsp2 = new UTSP2();
@@ -22,12 +25,15 @@ public class UTSP2 {
 
     public void start() throws IOException {
         scanner = new Scanner(System.in);
+        //bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         int row, column;
         String[] input;
 
         while (true) {
             try {
                 input = scanner.nextLine().split(" ");
+                //input = bufferedReader.readLine().split(" ");
+                if (input[0].equals("")||input[1].equals("")) break;
                 row = Integer.parseInt(input[0]);
                 column = Integer.parseInt(input[1]);
                 Node[][] nodes = shittyInput(row, column);
@@ -49,6 +55,7 @@ public class UTSP2 {
                 System.out.println(minSum);
                 nodeList.clear();
             } catch (Exception e) {
+                System.out.println("");
                 break;
             }
         }
@@ -136,6 +143,7 @@ public class UTSP2 {
         int counter = 0;
         for (int i = 0; i < row; i++) {
             input = scanner.nextLine().split(" ");
+            //input = bufferedReader.readLine().split(" ");
             if (input.length > column) {
                 for (int j = 0; j < input.length; j++) {
                     if (j % column == 0 && j > 0) {
@@ -152,23 +160,8 @@ public class UTSP2 {
                     nodes[i][j] = new Node(Integer.parseInt(input[j]), i, j);
                 }
             }
-
-
         }
 
-        return nodes;
-    }
-
-    private Node[][] createNodeBoard(int row, int column) throws IOException {
-        Node[][] nodes = new Node[row][column];
-        String[] input;
-        for (int i = 0; i < row; i++) {
-            //input = bufferedReader.readLine().split(" ");
-            input = scanner.nextLine().split(" ");
-            for (int j = 0; j < column; j++) {
-                nodes[i][j] = new Node(Integer.parseInt(input[j]), i, j);
-            }
-        }
         return nodes;
     }
 
@@ -180,16 +173,6 @@ public class UTSP2 {
                 System.out.print((node.path.get(i).row + 1) + " ");
         }
         System.out.println("");
-    }
-
-    private void printNodes(Node[][] array) {
-        for (int i = 0; i < array.length; i++) {
-            System.out.print("{");
-            for (int j = 0; j < array[0].length; j++) {
-                System.out.print(array[i][j].cost + ",");
-            }
-            System.out.println("}");
-        }
     }
 
     private class Node {
